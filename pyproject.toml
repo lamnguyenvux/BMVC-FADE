@@ -1,36 +1,67 @@
-[tool.poetry]
-name = "fade"
-version = "0.0.1"
-description = ""
-authors = []
-
-[tool.poetry.dependencies]
-python = "~3.10"
-s3path = "*"
-torch = ">=1.9.0"
-torchvision = "*"
-regex = "*"
-ftfy = "*"
-tqdm = "*"
-huggingface_hub = "*"
-sentencepiece = "*"
-protobuf = "*"
-timm = "*"
-einops = "*"
-open_clip_torch = "*"
-opencv-python = "*"
-matplotlib = "*"
-numpy = "*"
-requests = "*"
-notebook = "^7.1.1"
-xgboost = "^2.0.3"
-gem-torch = "^1.0.1"
-ruff = "^0.6.2"
-scikit-learn = "^1.5.1"
-black = "^24.8.0"
-click = "^8.1.7"
-pandas = "^2.2.2"
-
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "FADE"
+version = "0.0.1"
+authors = [
+    {name = "Vu Lam Nguyen", email = "lamnguyenvu98@gmail.com"},
+]
+# maintainers = [
+#     {name = "A. Great Maintainer", email = "maintainer@example.com" }
+# ]
+description = "FADE: Few-shot/zero-shot Anomaly Detection Engine using Large Vision-Language Model"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+# keywords = ["sample", "setuptools", "development"]
+# dynamic = ["dependencies"]
+
+# [tool.setuptools.dynamic]
+# dependencies = {file = ["requirements.txt"]}
+dependencies = [
+    "torch>=1.9.0",
+    "torchvision",
+    "regex",
+    "s3path",
+    "ftfy",
+    "tqdm",
+    "huggingface_hub",
+    "sentencepiece",
+    "protobuf",
+    "timm",
+    "einops",
+    "open_clip_torch",
+    "opencv-python",
+    "matplotlib",
+    "numpy",
+    "requests",
+    "notebook>=7.1.1,<8.0.0",
+    "xgboost>=2.0.3,<2.1.0",
+    "gem-torch>=1.0.1,<1.1.0",
+    "ruff>=0.6.2,<0.7.0",
+    "black>=24.8.0,<24.9.0",
+    "click>=8.1.7,<8.2.0",
+    "scikit-learn>=1.5.1,<1.6.0",
+    "pandas>=2.2.2,<2.3.0",
+]
+
+# [project.optional-dependencies]
+# dev = ["check-manifest"]
+# test = ["coverage"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["FADE", "FADE.*"]
+# exclude = []
+# package-data = { "BMVC-FADE" = ["**/*.yaml", "../config/*.yml", "../image/*"] }
+
+# [project.urls]
+# "Homepage" = "https://github.com/pypa/sampleproject"
+# "Bug Reports" = "https://github.com/pypa/sampleproject/issues"
+# "Funding" = "https://donate.pypi.org"
+# "Say Thanks!" = "http://saythanks.io/to/example"
+# "Source" = "https://github.com/pypa/sampleproject/"
+
+# [project.scripts]
+# run-script = "BMVC-FADE.__main__:main"

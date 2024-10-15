@@ -4,8 +4,8 @@ from typing import Union, List
 import numpy as np
 import pandas as pd
 
-from evaluation import metrics
-from evaluation.metrics import compute_pro
+from FADE.evaluation import metrics
+from .metrics import compute_pro
 
 
 def trapezoid(x, y, x_max=None):
@@ -58,7 +58,8 @@ def trapezoid(x, y, x_max=None):
             # the last x[ins-1] and x_max. Since we do not know the exact value
             # of y at x_max, we interpolate between y[ins] and y[ins-1].
             y_interp = y[ins - 1] + (
-                (y[ins] - y[ins - 1]) * (x_max - x[ins - 1]) / (x[ins] - x[ins - 1])
+                (y[ins] - y[ins - 1]) *
+                (x_max - x[ins - 1]) / (x[ins] - x[ins - 1])
             )
             correction = 0.5 * (y_interp + y[ins - 1]) * (x_max - x[ins - 1])
 

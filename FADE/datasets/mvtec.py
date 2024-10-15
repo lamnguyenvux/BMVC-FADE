@@ -3,7 +3,7 @@ from pathlib import Path
 
 import torch
 
-from datasets.base import BaseDataset, DatasetSplit
+from .base import BaseDataset, DatasetSplit
 
 
 class MVTecDataset(BaseDataset):
@@ -76,7 +76,8 @@ class MVTecDataset(BaseDataset):
                 for i, image_path in enumerate(imgpaths_per_class[classname][anomaly]):
                     data_tuple = [classname, anomaly, image_path]
                     if self.split == DatasetSplit.TEST and anomaly != "good":
-                        data_tuple.append(maskpaths_per_class[classname][anomaly][i])
+                        data_tuple.append(
+                            maskpaths_per_class[classname][anomaly][i])
                     else:
                         data_tuple.append(None)
                     data_to_iterate.append(data_tuple)

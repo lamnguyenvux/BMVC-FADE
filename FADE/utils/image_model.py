@@ -4,8 +4,8 @@ import gem
 import numpy as np
 import torch
 
-import datasets.base
-from utils.embeddings import extract_image_embeddings, retrieve_image_embeddings
+from FADE import datasets
+from .embeddings import extract_image_embeddings, retrieve_image_embeddings
 
 
 class ImageModel:

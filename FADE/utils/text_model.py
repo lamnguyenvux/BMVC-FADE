@@ -14,7 +14,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 from xgboost import XGBClassifier
 
-from utils.embeddings import extract_all_text_embeddings
+from .embeddings import extract_all_text_embeddings
 
 
 class TextModel:
@@ -144,7 +144,8 @@ class GmmModel(TextModel):
             random_state=42,
         )
         self.normal_pipe = Pipeline([("pca", normal_pca), ("gmm", normal_gmm)])
-        self.abnormal_pipe = Pipeline([("pca", abnormal_pca), ("gmm", abnormal_gmm)])
+        self.abnormal_pipe = Pipeline(
+            [("pca", abnormal_pca), ("gmm", abnormal_gmm)])
 
     def fit(self, text_embeddings: np.ndarray, text_labels: np.ndarray):
         mask = np.array(text_labels, dtype=bool)

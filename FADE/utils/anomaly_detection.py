@@ -3,9 +3,9 @@ from typing import Union
 import cv2
 import numpy as np
 
-from utils.embeddings import retrieve_image_embeddings
-from utils.image_model import ImageModel
-from utils.text_model import TextModel
+from .embeddings import retrieve_image_embeddings
+from .image_model import ImageModel
+from .text_model import TextModel
 
 
 def predict_classification(
@@ -100,7 +100,8 @@ def resize_and_aggregate_segmentations(
             np.mean(
                 [
                     cv2.resize(
-                        segmentations_single_resolution[i], (output_size, output_size)
+                        segmentations_single_resolution[i], (
+                            output_size, output_size)
                     )
                     for segmentations_single_resolution in segmentations_multi_resolution
                 ],
@@ -154,7 +155,8 @@ def predict_segmentation(
             token_type="patch",
         )
         if segmentation_mode == "language":
-            segmentations_flatten = text_image_matching(model, patch_embeddings)
+            segmentations_flatten = text_image_matching(
+                model, patch_embeddings)
         elif segmentation_mode == "vision":
             segmentations_flatten = image_image_matching(
                 model[img_size], patch_embeddings

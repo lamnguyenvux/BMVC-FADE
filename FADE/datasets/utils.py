@@ -2,8 +2,8 @@ import numpy as np
 import torch
 from open_clip import OPENAI_DATASET_STD, OPENAI_DATASET_MEAN
 
-from datasets.mvtec import MVTecDataset
-from datasets.visa import VisADataset
+from .mvtec import MVTecDataset
+from .visa import VisADataset
 
 
 def undo_transform(image: torch.Tensor, unorm: bool = True) -> np.array:

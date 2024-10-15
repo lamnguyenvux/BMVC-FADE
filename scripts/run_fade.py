@@ -12,21 +12,21 @@ from PIL import Image
 from pkg_resources import require
 from tqdm import tqdm
 
-from datasets.base import DatasetSplit, BaseDataset
-from datasets.mvtec import MVTecDataset
-from datasets.utils import undo_transform, min_max_normalization
-from datasets.visa import VisADataset
-from evaluation.utils import compute_and_store_final_results, evaluation
-from utils.anomaly_detection import predict_classification, predict_segmentation
-from utils.embeddings import extract_image_embeddings
-from utils.image_model import (
+from FADE.datasets.base import DatasetSplit, BaseDataset
+from FADE.datasets.mvtec import MVTecDataset
+from FADE.datasets.utils import undo_transform, min_max_normalization
+from FADE.datasets.visa import VisADataset
+from FADE.evaluation.utils import compute_and_store_final_results, evaluation
+from FADE.utils.anomaly_detection import predict_classification, predict_segmentation
+from FADE.utils.embeddings import extract_image_embeddings
+from FADE.utils.image_model import (
     extract_ref_patch_embeddings,
     build_image_models,
     extract_query_patch_embeddings,
     combine_patch_embeddings,
 )
-from utils.plots import plot_segmentation_images
-from utils.text_model import build_text_model
+from FADE.utils.plots import plot_segmentation_images
+from FADE.utils.text_model import build_text_model
 
 
 def load_dataset(dataset_name: str, dataset_source: str, **kwargs) -> BaseDataset:
@@ -223,7 +223,8 @@ def main(
 
     model_cache_dir = "models"
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    segmentation_img_sizes = [int(i) for i in segmentation_img_sizes.split(",")]
+    segmentation_img_sizes = [int(i)
+                              for i in segmentation_img_sizes.split(",")]
 
     config = {
         "dataset_name": dataset_name,
@@ -362,7 +363,8 @@ def main(
                 )
 
             # Extract image embeddings
-            img_sizes = list({classification_img_size, *segmentation_img_sizes})
+            img_sizes = list(
+                {classification_img_size, *segmentation_img_sizes})
             multiscale_images = {sz: data["image"][sz] for sz in img_sizes}
             image_embeddings = extract_image_embeddings(
                 multiscale_images, gem_model, device
@@ -433,7 +435,8 @@ def main(
 
                 # Vision-guided anomaly classification
                 if classification_mode == "vision" or classification_mode == "both":
-                    vision_guided_scores = np.max(vision_guided_maps, axis=(1, 2))
+                    vision_guided_scores = np.max(
+                        vision_guided_maps, axis=(1, 2))
 
             # Final classification scores
             scores = None
@@ -443,7 +446,8 @@ def main(
                 elif classification_mode == "vision":
                     scores = vision_guided_scores
                 elif classification_mode == "both":
-                    scores = (language_guided_scores + vision_guided_scores) / 2
+                    scores = (language_guided_scores +
+                              vision_guided_scores) / 2
                 scores = np.clip(scores, 0, 1)
                 plot_data["image_anomaly_score"].append(scores.tolist())
                 anomaly_scores.append(scores)
@@ -492,8 +496,10 @@ def main(
                             segmentations=segmentations,
                             anomaly_scores=scores,
                             masks=data["mask"][eval_img_size],
-                            image_transform=lambda x: undo_transform(x, unorm=True),
-                            mask_transform=lambda x: undo_transform(x, unorm=False),
+                            image_transform=lambda x: undo_transform(
+                                x, unorm=True),
+                            mask_transform=lambda x: undo_transform(
+                                x, unorm=False),
                         )
                     )
 
@@ -508,7 +514,8 @@ def main(
             ground_truth_scores = np.concatenate(ground_truth_scores)
         if segmentation_mode != "none":
             anomaly_segmentations = np.concatenate(anomaly_segmentations)
-            ground_truth_segmentations = np.concatenate(ground_truth_segmentations)
+            ground_truth_segmentations = np.concatenate(
+                ground_truth_segmentations)
         object_results = evaluation(
             ground_truth_scores,
             anomaly_scores,
@@ -519,14 +526,17 @@ def main(
         print(f"Object: {classname}")
         print(f"Full image AUROC: {object_results['full_image_auroc']:.2f}")
         print(f"Full pixel AUROC: {object_results['full_pixel_auroc']:.2f}")
-        print(f"Anomaly pixel AUROC: {object_results['anomaly_pixel_auroc']:.2f}")
+        print(
+            f"Anomaly pixel AUROC: {object_results['anomaly_pixel_auroc']:.2f}")
         print("\n")
 
     results_dt = compute_and_store_final_results(result_collect)
-    results_dt.to_csv(result_destination / "evaluation_results.csv", index=False)
+    results_dt.to_csv(result_destination /
+                      "evaluation_results.csv", index=False)
 
     # Save results
-    plot_data = {key: np.concatenate(plot_data[key]).tolist() for key in plot_data}
+    plot_data = {key: np.concatenate(
+        plot_data[key]).tolist() for key in plot_data}
     plot_data = pd.DataFrame(plot_data)
     if "vis_path" not in plot_data:
         plot_data["vis_path"] = None

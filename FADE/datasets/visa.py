@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import torch
 
-from datasets.base import BaseDataset, DatasetSplit
+from .base import BaseDataset, DatasetSplit
 
 
 class VisADataset(BaseDataset):
@@ -51,7 +51,8 @@ class VisADataset(BaseDataset):
                 msk_src_path = None
 
             if (self.split == DatasetSplit.TEST and set == "test") or (
-                self.split in [DatasetSplit.TRAIN, DatasetSplit.VAL] and set == "train"
+                self.split in [DatasetSplit.TRAIN,
+                               DatasetSplit.VAL] and set == "train"
             ):
                 imgpaths_per_class[classname][label].append(img_src_path)
                 maskpaths_per_class[classname][label].append(msk_src_path)
@@ -83,7 +84,8 @@ class VisADataset(BaseDataset):
                 for i, image_path in enumerate(imgpaths_per_class[classname][anomaly]):
                     data_tuple = [classname, anomaly, image_path]
                     if self.split == DatasetSplit.TEST and anomaly != "good":
-                        data_tuple.append(maskpaths_per_class[classname][anomaly][i])
+                        data_tuple.append(
+                            maskpaths_per_class[classname][anomaly][i])
                     else:
                         data_tuple.append(None)
                     data_to_iterate.append(data_tuple)
